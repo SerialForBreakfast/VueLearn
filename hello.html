@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 
-<h1 id="greeting"></h1>
+<div id="app">
+    <h1>{{greeting}}</h1>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script>
-    // document.getElementById('greeting').innerText = 'Yello';
-    $('#greeting').text('hello from jQuery.');
+    new Vue({
+        el: '#app',
+        data: {
+            greeting: 'Hello from Vue.'
+        }
+    });
 </script>
