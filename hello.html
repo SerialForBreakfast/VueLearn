@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <div id="app">
     <div class="container">
-        <form class="mt-5">
+        <form v-show="!submitted" class="mt-5">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" v-model="email" class="form-control form-control-lg">
             </div>
             <button type="submit" @click.prevent="process" class="btn btn-primary">Submit</button>
         </form>
+        <h2 v-show="submitted" class="mt-5">Thanks for signing up!</h2>
     </div>
 </div>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -18,12 +19,13 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            email: "joe@showblender.com"
+            email: "joe@showblender.com",
+            submitted: false
             
         }, 
         methods: {
             process: function() {
-                alert('Submitted ' + this.email);
+                this.submitted = true;
             }
         }
     });
