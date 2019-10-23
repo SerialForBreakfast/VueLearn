@@ -19,8 +19,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+    var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
+    var url = "https://api.nasa.gov/planetary/apod?api_key=" + apiKey;
     var vm = new Vue({
         el: '#app',
         data: {
@@ -34,6 +36,12 @@
             }
         }
     });
+
+    axios.get(url)
+        .then(function (res) {
+            console.log(res);   
+
+        })
 </script>
 
 
