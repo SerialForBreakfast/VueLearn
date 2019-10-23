@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
     [v-cloak] {
         display: none;
@@ -7,41 +8,37 @@
 </style>
 <div id="app">
     <div class="container">
-        <form v-show="!submitted" class="mt-5">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" v-model="email" class="form-control form-control-lg">
-            </div>
-            <button type="submit" @click.prevent="process" class="btn btn-primary">Submit</button>
-        </form>
-        <h2 v-show="submitted" v-cloak class="mt-5">Thanks for signing up!</h2>
+        <img :src="imgSrc" :title="imgTitle">
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
-    var url = "https://api.nasa.gov/planetary/apod?api_key=" + apiKey;
+
     var vm = new Vue({
         el: '#app',
         data: {
-            email: "joe@showblender.com",
-            submitted: false
-            
-        }, 
+            imgSrc: '',
+            imgTitle: ''
+        },
+        created: function () {
+            this.fetchAPOD();  
+        },
         methods: {
-            process: function() {
-                this.submitted = true;
+            fetchAPOD: function () {
+                var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
+                var url = "https://api.nasa.gov/planetary/apod?api_key=" + apiKey;
+                axios.get(url)
+                    .then(function (res) {
+                        console.log(res);
+                        vm.imgSrc = res.data.url;
+                        vm.imgTitle = res.data.title;
+
+                    })
             }
         }
     });
 
-    axios.get(url)
-        .then(function (res) {
-            console.log(res);   
-
-        })
+    vm.fetchAPOD();
 </script>
-
-
