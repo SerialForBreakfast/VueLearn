@@ -12,15 +12,19 @@
     <div class="container">
         <div class="card mt-5">
             <h1 class="card-header">Near Earth Objects</h1>
-            <table class="table">
+            <div class="m-3" v-cloak v-if="asteroids.length > 0">
+                <p>Displaying {{asteroids.length}} asteroids</p>
+            </div>
+            <table class="table" v-cloak v-if="asteroids.length > 0">
                 <thead class="thead-light">
                     <th>#</th>
                     <th>Name</th>
                     <th>Close Approach Date</th>
                     <th>Miss Distance</th>
+                    <th>Remove</th>
                 </thead>
                 <tbody>
-                    <tr v-for="(a, index) in asteroids">
+                    <tr v-for="(a, index) in asteroids" :key="a.neo_reference_id">
                         <td>{{index + 1}}</td>
                         <td>{{a.name}}</td>
                         <td>{{getCloseApproachDate(a)}}</td>
