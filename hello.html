@@ -6,7 +6,7 @@
                 <label for="email">Email</label>
                 <input type="email" v-model="email" class="form-control form-control-lg">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" v-on:click="process" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
@@ -20,6 +20,12 @@
         data: {
             email: "joe@showblender.com"
             
+        }, 
+        methods: {
+            process: function(event) {
+                event.preventDefault();
+                alert('Submitted ' + this.email);
+            }
         }
     });
 </script>
