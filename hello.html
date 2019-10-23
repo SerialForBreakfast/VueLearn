@@ -19,11 +19,10 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            imgSrc: '',
-            imgTitle: ''
+            asteroids: []
         },
         created: function () {
-            this.fetchAPOD();  
+            this.fetchAsteroids();  
         },
         methods: {
             fetchAPOD: function () {
@@ -36,9 +35,18 @@
                         vm.imgTitle = res.data.title;
 
                     })
+            },
+            fetchAsteroids: function () {
+                var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
+                var url = "https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=" + apiKey;
+                axios.get(url)
+                    .then(function (res) {
+                        console.log(res);
+                        vm.asteroids = res.data.near_earth_objects.slice(0, 10);
+                    })
             }
         }
     });
 
-    vm.fetchAPOD();
+    // vm.fetchAPOD();
 </script>
