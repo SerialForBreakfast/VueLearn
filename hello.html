@@ -51,7 +51,8 @@
         data: {
             imgSrc: '',
             imgTitle: '',
-            asteroids: []
+            asteroids: [],
+            apiKey: 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT'
         },
         created: function () {
             this.fetchAsteroids();
@@ -59,8 +60,7 @@
         },
         methods: {
             fetchAPOD: function () {
-                var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
-                var url = "https://api.nasa.gov/planetary/apod?api_key=" + apiKey;
+                var url = "https://api.nasa.gov/planetary/apod?api_key=" + this.apiKey;
                 axios.get(url)
                     .then(function (res) {
                         console.log(res);
@@ -70,8 +70,7 @@
                     })
             },
             fetchAsteroids: function () {
-                var apiKey = 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT';
-                var url = "https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=" + apiKey;
+                var url = "https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=" + this.apiKey;
                 axios.get(url)
                     .then(function (res) {
                         console.log(res);
