@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
@@ -12,13 +14,26 @@
             <h1 class="card-header">Near Earth Objects</h1>
             <table class="table">
                 <thead class="thead-light">
+                    <th>#</th>
                     <th>Name</th>
                     <th>Close Approach Date</th>
+                    <th>Miss Distance</th>
                 </thead>
                 <tbody>
-                    <tr v-for="a in asteroids">
+                    <tr v-for="(a, index) in asteroids">
+                        <td>{{index + 1}}</td>
                         <td>{{a.name}}</td>
                         <td>{{getCloseApproachDate(a)}}</td>
+                        <td>
+                            <ul v-if="a.close_approach_data.length > 0">
+                                <li v-for="(value, key, index) in a.close_approach_data[0].miss_distance">
+                                    {{key}}: {{value}}
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <button @click="remove(index)" class="btn btn-warning">remove</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -51,7 +66,7 @@
                         console.log(res);
                         vm.imgSrc = res.data.url;
                         vm.imgTitle = res.data.title;
-
+                        // var test = res.data
                     })
             },
             fetchAsteroids: function () {
@@ -69,6 +84,9 @@
                 } else {
                     return "N/A"
                 }
+            },
+            remove: function (index) {
+                this.asteroids.splice(index, 1);
             }
         }
     });
