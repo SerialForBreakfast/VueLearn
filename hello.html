@@ -16,7 +16,7 @@
                 <p>Displaying {{numAsteroids}} asteroids.</p>
                 <p>Closest Object : {{closestObject}}</p>
             </div>
-            <table class="table" v-cloak v-if="numAsteroids > 0">
+            <table class="table table-striped" v-cloak v-if="numAsteroids > 0">
                 <thead class="thead-light">
                     <th>#</th>
                     <th>Name</th>
@@ -25,7 +25,7 @@
                     <th>Remove</th>
                 </thead>
                 <tbody>
-                    <tr v-for="(a, index) in asteroids" :key="a.neo_reference_id">
+                    <tr v-for="(a, index) in asteroids" :key="a.neo_reference_id" :style="getRowStyle(a)" style="color: green">
                         <td>{{index + 1}}</td>
                         <td>{{a.name}}</td>
                         <td>{{getCloseApproachDate(a)}}</td>
@@ -43,14 +43,14 @@
                 </tbody>
             </table>
         </div>
+        <div class="m-5">NASA Pic of the day!</div>
         <img :src="imgSrc" :title="imgTitle">
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-
     var vm = new Vue({
         el: '#app',
         data: {
@@ -108,6 +108,14 @@
             },
             remove: function (index) {
                 this.asteroids.splice(index, 1);
+            }, 
+            getRowStyle: function (a) {
+                if (a.close_approach_data.length == 0) {
+                    return {
+                        border: 'solid 3px red',
+                        color: 'red'
+                    };
+                }
             }
         }
     });
