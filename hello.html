@@ -12,32 +12,61 @@
         border: solid 3px red;
         color: red
     }
-    .shooting-star-leave-to, .shooting-star-enter {
+
+    .shooting-star-leave-to,
+    .shooting-star-enter {
         /* transform: translateX(150px) rotate(30deg); */
         opacity: 0;
     }
-    .shooting-star-enter-active, .shooting-star-leave-active {
+
+    .shooting-star-enter-active,
+    .shooting-star-leave-active {
         transition: all .5s ease;
     }
-    .neo-list-leave-to, .neo-list-enter {
+
+    .neo-list-leave-to,
+    .neo-list-enter {
         opacity: 0;
     }
-    .neo-list-enter-active, .neo-list-leave-active {
+
+    .neo-list-enter-active,
+    .neo-list-leave-active {
         transition: all .51s ease-in;
+    }
+    .spin-enter-active {
+        animation: spin-steps 2s;
+    }
+    @keyframes spin-steps {
+        0% {
+            transform: scale(1) rotate(0);
+        }
+        50% {
+            transform: scale(10) rotate(360deg);
+        }
+        100% {
+            transform: scale(1) rotate(1080deg);
+        }
     }
 </style>
 <div id="app">
     <div class="container">
         <div class="card mt-5">
-            <h1 class="card-header">Near Earth Objects</h1>
+            <h1 class="card-header">
+                Near Earth 
+                <transition name="spin" appear>
+                    <span style="display:inline-block">Objects</span>
+                </transition>  
+            </h1>
             <transition name="shooting-star">
-            <div class="m-3" v-cloak v-if="numAsteroids > 0 && showSummary">
-                <p>Displaying {{numAsteroids}} asteroids.</p>
-                <p>Closest Object : {{closestObject}}</p>
-            </div>
+                <div class="m-3" v-cloak v-if="numAsteroids > 0 && showSummary">
+                    <p>Displaying {{numAsteroids}} asteroids.</p>
+                    <p>Closest Object : {{closestObject}}</p>
+                </div>
             </transition>
             <div class="m-3">
-                <p><a href="#" @click="showSummary = !showSummary">Show/Hide Summary</a></p>
+                <p>
+                    <a href="#" @click="showSummary = !showSummary">Show/Hide Summary</a>
+                </p>
             </div>
             <table class="table table-striped" v-cloak v-if="numAsteroids > 0" :class="['table-dark','table-bordered']">
                 <thead class="thead-light">
@@ -64,7 +93,7 @@
                             <button @click="remove(index)" class="btn btn-warning">remove</button>
                         </td>
                     </tr>
-                    </tbody>
+                </tbody>
             </table>
         </div>
         <div class="m-5">NASA Pic of the day!</div>
