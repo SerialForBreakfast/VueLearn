@@ -7,16 +7,39 @@
     [v-cloak] {
         display: none;
     }
+
+    .hightlight {
+        border: solid 3px red;
+        color: red
+    }
+    .shooting-star-leave-to, .shooting-star-enter {
+        /* transform: translateX(150px) rotate(30deg); */
+        opacity: 0;
+    }
+    .shooting-star-enter-active, .shooting-star-leave-active {
+        transition: all .5s ease;
+    }
+    .neo-list-leave-to, .neo-list-enter {
+        opacity: 0;
+    }
+    .neo-list-enter-active, .neo-list-leave-active {
+        transition: all .51s ease-in;
+    }
 </style>
 <div id="app">
     <div class="container">
         <div class="card mt-5">
             <h1 class="card-header">Near Earth Objects</h1>
-            <div class="m-3" v-cloak v-if="numAsteroids > 0">
+            <transition name="shooting-star">
+            <div class="m-3" v-cloak v-if="numAsteroids > 0 && showSummary">
                 <p>Displaying {{numAsteroids}} asteroids.</p>
                 <p>Closest Object : {{closestObject}}</p>
             </div>
-            <table class="table table-striped" v-cloak v-if="numAsteroids > 0">
+            </transition>
+            <div class="m-3">
+                <p><a href="#" @click="showSummary = !showSummary">Show/Hide Summary</a></p>
+            </div>
+            <table class="table table-striped" v-cloak v-if="numAsteroids > 0" :class="['table-dark','table-bordered']">
                 <thead class="thead-light">
                     <th>#</th>
                     <th>Name</th>
@@ -24,8 +47,9 @@
                     <th>Miss Distance</th>
                     <th>Remove</th>
                 </thead>
-                <tbody>
-                    <tr v-for="(a, index) in asteroids" :key="a.neo_reference_id" :style="getRowStyle(a)" style="color: green">
+                <tbody is="transition-group" tag="tbody" name="neo-list" v-cloak>
+                    <tr v-for="(a, index) in asteroids" :key="a.neo_reference_id"
+                        :class="{hightlight: isMissingData(a), 'shadow-sm': true}">
                         <td>{{index + 1}}</td>
                         <td>{{a.name}}</td>
                         <td>{{getCloseApproachDate(a)}}</td>
@@ -40,7 +64,7 @@
                             <button @click="remove(index)" class="btn btn-warning">remove</button>
                         </td>
                     </tr>
-                </tbody>
+                    </tbody>
             </table>
         </div>
         <div class="m-5">NASA Pic of the day!</div>
@@ -48,7 +72,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     var vm = new Vue({
@@ -57,24 +81,25 @@
             imgSrc: '',
             imgTitle: '',
             asteroids: [],
-            apiKey: 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT'
+            apiKey: 'f06ar9rqQBEcegTbbQV7pNZXMPMlmrSKTD5w3ecT',
+            showSummary: true
         },
         created: function () {
             this.fetchAsteroids();
             this.fetchAPOD();
         },
         computed: {
-            numAsteroids: function() {
+            numAsteroids: function () {
                 return this.asteroids.length;
             },
-            closestObject: function() {
+            closestObject: function () {
                 var neosHavingData = this.asteroids.filter(function (neo) {
                     return neo.close_approach_data.length > 0;
                 });
-                var simpleNeos = neosHavingData.map(function(neo) {
-                    return {name: neo.name, miles: neo.close_approach_data[0].miss_distance.miles};
-                }); 
-                var sortedNeos = simpleNeos.sort(function (a , b) {
+                var simpleNeos = neosHavingData.map(function (neo) {
+                    return { name: neo.name, miles: neo.close_approach_data[0].miss_distance.miles };
+                });
+                var sortedNeos = simpleNeos.sort(function (a, b) {
                     return a.miles = b.miles;
                 });
                 return sortedNeos[0].name;
@@ -100,7 +125,7 @@
                     })
             },
             getCloseApproachDate: function (a) {
-                if (a.close_approach_data.length > 0 ) {
+                if (a.close_approach_data.length > 0) {
                     return a.close_approach_data[0].close_approach_date;
                 } else {
                     return "N/A"
@@ -108,7 +133,7 @@
             },
             remove: function (index) {
                 this.asteroids.splice(index, 1);
-            }, 
+            },
             getRowStyle: function (a) {
                 if (a.close_approach_data.length == 0) {
                     return {
@@ -116,6 +141,9 @@
                         color: 'red'
                     };
                 }
+            },
+            isMissingData: function (a) {
+                return a.close_approach_data.length == 0
             }
         }
     });
